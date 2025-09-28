@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Shakespeare Club Communication App is a web-based platform designed for Sir Isaac Newton College of Engineering and Technology to enhance students' communication skills through structured practice modules. The application provides different types of communication exercises (listening, observation, speaking, and writing) with AI-powered analysis and feedback using Google's Gemini API. Students can register, complete practices, track their progress, and view performance rankings, while administrators can manage students and create new practice modules.
+The **Gamified Shakespeare Club Communication App** is a revolutionary web-based platform designed for Sir Isaac Newton College of Engineering and Technology to enhance students' communication skills through engaging, interactive practice modules. The application features a complete gamification system with points (10 per task), streaks, badges, visual celebrations, and AI-powered analysis using Google's Gemini API. Students register with username, register number, and department, then progress through four exciting modules while earning rewards and competing with peers. The app includes advanced copy-paste prevention and ensures fair, engaging learning experiences.
 
 ## User Preferences
 
