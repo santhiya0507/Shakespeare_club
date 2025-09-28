@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ biography.person_name }} - Speaking Practice</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/gamified.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-gradient">
+    <div class="container-fluid py-4">
+        <!-- Header -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="game-card">
+                    <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <h2><i class="fas fa-microphone me-2" style="color: var(--speaking-color);"></i>{{ biography.person_name }}</h2>
+                            <p class="mb-0">{{ biography.title }}</p>
+                        </div>
+                        <div class="col-md-4 text-end">
+                            <a href="{{ url_for('speaking_module') }}" class="btn btn-outline-primary">
+                                <i class="fas fa-arrow-left me-2"></i>Back to Speaking
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Biography Content -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="module-card speaking">
+                    <div class="text-center mb-4">
+                        {% if biography.profession == 'Cricketer' %}
+                            <i class="fas fa-baseball-ball fa-4x mb-3" style="color: var(--speaking-color);"></i>
+                        {% elif biography.profession == 'Scientist' %}
+                            <i class="fas fa-flask fa-4x mb-3" style="color: var(--speaking-color);"></i>
+                        {% else %}
+                            <i class="fas fa-star fa-4x mb-3" style="color: var(--speaking-color);"></i>
+                        {% endif %}
+                        <h3>{{ biography.person_name }}</h3>
+                        <span class="badge" style="background: var(--speaking-color); color: white; font-size: 1rem;">
+                            {{ biography.profession }}
+                        </span>
+                    </div>
+                    
+                    <div class="biography-content no-copy" id="biographyText">
+                        <p style="font-size: 1.1rem; line-height: 1.8;">{{ biography.content }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Practice Instructions -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="game-card">
+                    <h5><i class="fas fa-bullhorn me-2"></i>Speaking Instructions</h5>
+                    <div class="alert alert-info">
+                        <ol class="mb-0">
+                            <li><strong>Read Clearly:</strong> Read the biography above in a clear, confident voice</li>
+                            <li><strong>Proper Pronunciation:</strong> Focus on correct pronunciation of each word</li>
+                            <li><strong>Natural Pace:</strong> Speak at a natural, conversational pace</li>
+                            <li><strong>Expression:</strong> Add appropriate emotion and emphasis</li>
+                            <li><strong>Record Your Reading:</strong> Type what you read in the box below for AI analysis</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Practice Form -->
+        <div class="row">
+            <div class="col-12">
+                <div class="game-card">
+                    <form id="speakingForm" method="POST" action="{{ url_for('submit_speaking') }}">
+                        <input type="hidden" name="bio_id" value="{{ biography.id }}">
+                        
+                        <div class="mb-4">
+                            <label for="recorded_text" class="form-label">
+                                <i class="fas fa-keyboard me-2"></i>Type Your Reading Here:
+                            </label>
+                            <textarea class="form-control game-input no-copy" 
+                                      id="recorded_text" 
+                                      name="recorded_text" 
+                                      rows="10" 
+                                      placeholder="Type what you just read aloud here. The AI will compare your text with the original biography to check accuracy..."
+                                      required></textarea>
+                            <small class="text-muted">💡 Read the biography aloud first, then type what you read for AI analysis</small>
+                        </div>
+                        
+                        <div class="text-center">
+                            <button type="button" class="btn btn-speaking btn-lg me-2" onclick="startSpeakingPractice()">
+                                <i class="fas fa-microphone me-2"></i>Start Recording Practice
+                            </button>
+                            <button type="submit" class="btn btn-game-primary btn-lg" id="submitBtn">
+                                <i class="fas fa-brain me-2"></i>Analyze My Speaking
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Celebration overlay (hidden initially) -->
+    <div id="celebrationOverlay" class="celebration-overlay" style="display: none;"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ url_for('static', filename='js/gamified.js') }}"></script>
+    
+    <script>
+        function startSpeakingPractice() {
+            showFlashMessage('🎤 Start reading the biography aloud! Take your time and speak clearly.', 'info');
+            
+            // Highlight the biography text for reading
+            const biographyText = document.getElementById('biographyText');
+            biographyText.style.background = 'linear-gradient(45deg, rgba(231, 76, 60, 0.1) 0%, rgba(192, 57, 43, 0.1) 100%)';
+            biographyText.style.border = '2px solid var(--speaking-color)';
+            biographyText.style.borderRadius = '10px';
+            biographyText.style.padding = '20px';
+            
+            // After 30 seconds, prompt to type
+            setTimeout(() => {
+                showFlashMessage('✅ Great! Now type what you just read in the text area below.', 'success');
+                document.getElementById('recorded_text').focus();
+                
+                // Remove highlight
+                biographyText.style.background = '';
+                biographyText.style.border = '';
+                biographyText.style.borderRadius = '';
+                biographyText.style.padding = '';
+            }, 30000);
+        }
+
+        // Handle form submission with celebration
+        document.getElementById('speakingForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const submitBtn = document.getElementById('submitBtn');
+            const originalText = submitBtn.innerHTML;
+            
+            // Show loading
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Analyzing Speech...';
+            submitBtn.disabled = true;
+            
+            // Submit form data
+            const formData = new FormData(this);
+            
+            fetch('{{ url_for("submit_speaking") }}', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+                
+                if (data.celebration) {
+                    // Trigger celebration animation
+                    triggerCelebration(data.points);
+                    
+                    // Show success message with flowers and hearts
+                    setTimeout(() => {
+                        showFlashMessage(`🎉 Excellent speaking! Similarity: ${data.similarity.toFixed(1)}% | Points earned: ${data.points}`, 'success');
+                        
+                        // Redirect after celebration
+                        setTimeout(() => {
+                            window.location.href = '{{ url_for("speaking_module") }}';
+                        }, 3000);
+                    }, 1000);
+                } else {
+                    showFlashMessage(`Good effort! Similarity: ${data.similarity.toFixed(1)}% | Points earned: ${data.points}. Keep practicing!`, 'info');
+                    
+                    setTimeout(() => {
+                        window.location.href = '{{ url_for("speaking_module") }}';
+                    }, 2000);
+                }
+            })
+            .catch(error => {
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+                showFlashMessage('Error submitting practice. Please try again.', 'error');
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Writing Practice - Shakespeare Club</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/gamified.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-gradient">
+    <div class="container-fluid py-4">
+        <!-- Header -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="game-card">
+                    <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <h2><i class="fas fa-pen-fancy me-2" style="color: var(--writing-color);"></i>Writing Practice</h2>
+                            <p class="mb-0">Share daily quotes and showcase your writing skills!</p>
+                        </div>
+                        <div class="col-md-4 text-end">
+                            <a href="{{ url_for('dashboard') }}" class="btn btn-outline-primary">
+                                <i class="fas fa-home me-2"></i>Back to Dashboard
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-info game-alert alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" style="filter: invert(1);"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <!-- Daily Quote Competition -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="module-card writing">
+                    <h5><i class="fas fa-trophy me-2"></i>Daily Quote Competition</h5>
+                    <p>Be the first from your department to post today's inspirational quote and get featured on the homepage!</p>
+                    
+                    <div class="row">
+                        <div class="col-md-3 text-center mb-3">
+                            <i class="fas fa-quote-left fa-2x mb-2" style="color: var(--writing-color);"></i>
+                            <p><strong>Post First:</strong> 15 points + Featured</p>
+                        </div>
+                        <div class="col-md-3 text-center mb-3">
+                            <i class="fas fa-users fa-2x mb-2" style="color: var(--writing-color);"></i>
+                            <p><strong>Others:</strong> 10 points</p>
+                        </div>
+                        <div class="col-md-3 text-center mb-3">
+                            <i class="fas fa-star fa-2x mb-2" style="color: var(--writing-color);"></i>
+                            <p><strong>Get Featured:</strong> Homepage glory!</p>
+                        </div>
+                        <div class="col-md-3 text-center mb-3">
+                            <i class="fas fa-calendar fa-2x mb-2" style="color: var(--writing-color);"></i>
+                            <p><strong>Daily Reset:</strong> New chances!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Today's Quote Submission -->
+        {% if not user_posted_today %}
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="game-card">
+                    <h5><i class="fas fa-edit me-2"></i>Post Today's Quote</h5>
+                    
+                    <form method="POST" action="{{ url_for('submit_quote') }}" class="game-form">
+                        <div class="row">
+                            <div class="col-md-8 mb-3">
+                                <label for="quote" class="form-label">Inspirational Quote:</label>
+                                <textarea class="form-control game-input no-copy" 
+                                          id="quote" 
+                                          name="quote" 
+                                          rows="3" 
+                                          placeholder="Enter an inspiring quote that motivates you or others..."
+                                          required></textarea>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="author" class="form-label">Author:</label>
+                                <input type="text" class="form-control game-input" 
+                                       id="author" 
+                                       name="author" 
+                                       placeholder="Quote author">
+                                
+                                <button type="submit" class="btn btn-writing w-100 mt-3">
+                                    <i class="fas fa-paper-plane me-2"></i>Submit Quote
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="game-card text-center">
+                    <i class="fas fa-check-circle fa-3x mb-3" style="color: var(--writing-color);"></i>
+                    <h5>You've Already Posted Today!</h5>
+                    <p>Come back tomorrow for another chance to share inspiration and earn points!</p>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Today's Department Quotes -->
+        {% if department_quotes %}
+        <div class="row mb-4">
+            <div class="col-12">
+                <h4 class="text-center text-white mb-4">📜 Today's Quotes by Department</h4>
+            </div>
+            
+            {% set departments = {} %}
+            {% for quote in department_quotes %}
+                {% if quote.department not in departments %}
+                    {% set _ = departments.update({quote.department: []}) %}
+                {% endif %}
+                {% set _ = departments[quote.department].append(quote) %}
+            {% endfor %}
+            
+            {% for dept, quotes in departments.items() %}
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="module-card writing">
+                    <h6 class="text-center">
+                        <i class="fas fa-graduation-cap me-2"></i>{{ dept }}
+                    </h6>
+                    
+                    {% for quote in quotes %}
+                    <div class="quote-item mb-3 p-3" style="background: rgba(155, 89, 182, 0.1); border-radius: 10px;">
+                        {% if loop.first %}
+                            <div class="text-center mb-2">
+                                <span class="badge" style="background: var(--writing-color); color: white;">
+                                    🏆 First Posted - Featured!
+                                </span>
+                            </div>
+                        {% endif %}
+                        
+                        <blockquote class="blockquote-sm">
+                            <p class="mb-2">"{{ quote.quote }}"</p>
+                            <footer class="blockquote-footer">
+                                {{ quote.author or 'Anonymous' }}
+                                <br><small>Posted by {{ quote.username }}</small>
+                            </footer>
+                        </blockquote>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <!-- Writing Topics for Practice -->
+        <div class="row">
+            <div class="col-12">
+                <h4 class="text-center text-white mb-4">✍️ Writing Topics for Practice</h4>
+                <p class="text-center text-white mb-4">Practice your writing skills with these inspiring topics!</p>
+            </div>
+            
+            {% for topic in topics %}
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="module-card writing">
+                    <h6><i class="fas fa-lightbulb me-2"></i>{{ topic.topic }}</h6>
+                    <p class="text-muted">{{ topic.description }}</p>
+                    
+                    <button class="btn btn-writing w-100" onclick="practiceWriting('{{ topic.topic }}', '{{ topic.description }}')">
+                        <i class="fas fa-pen me-2"></i>Practice Writing
+                    </button>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Writing Practice Modal -->
+    <div class="modal fade" id="writingModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content" style="background: rgba(255, 255, 255, 0.95); border-radius: 15px;">
+                <div class="modal-header">
+                    <h5 class="modal-title">✍️ Writing Practice</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="writingTopic" class="mb-3"></div>
+                    <div id="writingDescription" class="mb-3"></div>
+                    
+                    <textarea class="form-control game-input no-copy" 
+                              id="writingPractice" 
+                              rows="10" 
+                              placeholder="Start writing your thoughts here... Remember to use proper grammar and express your ideas clearly!"
+                              style="min-height: 200px;"></textarea>
+                    
+                    <div class="mt-3">
+                        <button class="btn btn-writing" onclick="analyzeWriting()">
+                            <i class="fas fa-brain me-2"></i>Analyze My Writing
+                        </button>
+                        <button class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                            <i class="fas fa-times me-2"></i>Close
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating animations -->
+    <div class="floating-elements">
+        <div class="floating-element">✍️</div>
+        <div class="floating-element">📜</div>
+        <div class="floating-element">💭</div>
+        <div class="floating-element">🌟</div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ url_for('static', filename='js/gamified.js') }}"></script>
+    
+    <script>
+        function practiceWriting(topic, description) {
+            document.getElementById('writingTopic').innerHTML = `<h6><i class="fas fa-lightbulb me-2"></i>${topic}</h6>`;
+            document.getElementById('writingDescription').innerHTML = `<p class="text-muted">${description}</p>`;
+            document.getElementById('writingPractice').value = '';
+            
+            const modal = new bootstrap.Modal(document.getElementById('writingModal'));
+            modal.show();
+        }
+        
+        function analyzeWriting() {
+            const text = document.getElementById('writingPractice').value;
+            
+            if (text.length < 50) {
+                showFlashMessage('Please write at least 50 characters for analysis!', 'warning');
+                return;
+            }
+            
+            // Simple analysis simulation
+            const wordCount = text.split(' ').length;
+            const sentenceCount = text.split(/[.!?]+/).length - 1;
+            
+            let feedback = `📊 Writing Analysis:\n\n`;
+            feedback += `• Word count: ${wordCount}\n`;
+            feedback += `• Sentences: ${sentenceCount}\n`;
+            feedback += `• Average words per sentence: ${Math.round(wordCount / sentenceCount)}\n\n`;
+            
+            if (wordCount > 100) {
+                feedback += `✅ Great length! You've written a substantial response.\n`;
+            } else {
+                feedback += `💡 Try writing more to fully express your thoughts.\n`;
+            }
+            
+            if (text.includes(',') && text.includes('.')) {
+                feedback += `✅ Good use of punctuation!\n`;
+            }
+            
+            feedback += `\n🎯 Keep practicing to improve your writing skills!`;
+            
+            alert(feedback);
+            
+            // Award practice points (simulated)
+            showFlashMessage('🎉 Writing practice completed! +5 practice points earned!', 'success');
+        }
+    </script>
+</body>
+</html>
