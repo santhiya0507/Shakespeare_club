@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block title %}Student Management - Shakespeare Club{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <h2>Student Management 👥</h2>
+        <hr>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        {% if students %}
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Name</th>
+                            <th>Register Number</th>
+                            <th>Department</th>
+                            <th>Email</th>
+                            <th>Mobile</th>
+                            <th>Average Score</th>
+                            <th>Total Practices</th>
+                            <th>Joined</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for student in students %}
+                        <tr>
+                            <td>
+                                {% if loop.index == 1 %}🥇
+                                {% elif loop.index == 2 %}🥈
+                                {% elif loop.index == 3 %}🥉
+                                {% else %}{{ loop.index }}
+                                {% endif %}
+                            </td>
+                            <td>{{ student.name }}</td>
+                            <td>{{ student.register_number }}</td>
+                            <td>{{ student.department }}</td>
+                            <td>{{ student.email }}</td>
+                            <td>{{ student.mobile_number }}</td>
+                            <td>
+                                {% if student.avg_score %}
+                                    <span class="badge bg-success">{{ "%.1f"|format(student.avg_score) }}%</span>
+                                {% else %}
+                                    <span class="badge bg-secondary">No scores</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ student.total_practices or 0 }}</td>
+                            <td>{{ student.created_at[:10] if student.created_at else 'N/A' }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div class="alert alert-info">
+                <h5>No students registered yet</h5>
+                <p>Students can register through the student portal.</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h5>📊 Performance Analytics</h5>
+            </div>
+            <div class="card-body">
+                <p>Use the AI-powered analysis to generate detailed reports on student communication improvements and recommendations.</p>
+                <button class="btn btn-info" onclick="generateAnalytics()">Generate AI Report</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

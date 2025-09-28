@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}Add Practice - Shakespeare Club{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h4>➕ Add New Practice</h4>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    <div class="mb-3">
+                        <label for="title" class="form-label">Practice Title</label>
+                        <input type="text" class="form-control" id="title" name="title" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="practice_type" class="form-label">Practice Type</label>
+                        <select class="form-control" id="practice_type" name="practice_type" required>
+                            <option value="">Select Practice Type</option>
+                            <option value="listening">👂 Listening</option>
+                            <option value="observation">👁️ Observation</option>
+                            <option value="speaking">🗣️ Speaking</option>
+                            <option value="writing">✍️ Writing</option>
+                        </select>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description/Instructions</label>
+                        <textarea class="form-control" id="description" name="description" rows="6" 
+                                  placeholder="Provide detailed instructions for students about this practice..." required></textarea>
+                    </div>
+                    
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{{ url_for('admin_practices') }}" class="btn btn-secondary">Cancel</a>
+                        <button type="submit" class="btn btn-primary">Add Practice</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row justify-content-center mt-3">
+    <div class="col-md-8">
+        <div class="alert alert-info">
+            <h6>💡 Practice Guidelines</h6>
+            <ul class="mb-0">
+                <li><strong>Listening:</strong> Audio comprehension, instructions, or dialogue analysis</li>
+                <li><strong>Observation:</strong> Visual analysis, scenario description, or pattern recognition</li>
+                <li><strong>Speaking:</strong> Oral presentation, discussion points, or speech preparation</li>
+                <li><strong>Writing:</strong> Essays, reports, creative writing, or structured responses</li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}

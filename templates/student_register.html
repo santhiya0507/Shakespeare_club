@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block title %}Student Registration - Shakespeare Club{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="text-center">👨‍🎓 Student Registration</h4>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Full Name</label>
+                        <input type="text" class="form-control" id="name" name="name" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="department" class="form-label">Department</label>
+                        <select class="form-control" id="department" name="department" required>
+                            <option value="">Select Department</option>
+                            <option value="Computer Science">Computer Science</option>
+                            <option value="Mechanical">Mechanical</option>
+                            <option value="Electrical">Electrical</option>
+                            <option value="Civil">Civil</option>
+                            <option value="Electronics">Electronics</option>
+                            <option value="Chemical">Chemical</option>
+                            <option value="Information Technology">Information Technology</option>
+                        </select>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="register_number" class="form-label">Register Number</label>
+                        <input type="text" class="form-control" id="register_number" name="register_number" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="mobile_number" class="form-label">Mobile Number</label>
+                        <input type="tel" class="form-control" id="mobile_number" name="mobile_number" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email Address</label>
+                        <input type="email" class="form-control" id="email" name="email" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="password" name="password" required>
+                    </div>
+                    
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary">Register</button>
+                    </div>
+                </form>
+                
+                <div class="text-center mt-3">
+                    <p>Already have an account? <a href="{{ url_for('student_login') }}">Login here</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

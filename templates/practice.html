@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block title %}{{ practice.title }} - Shakespeare Club{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h4>
+                    {% if practice.practice_type == 'listening' %}👂
+                    {% elif practice.practice_type == 'observation' %}👁️
+                    {% elif practice.practice_type == 'speaking' %}🗣️
+                    {% elif practice.practice_type == 'writing' %}✍️
+                    {% endif %}
+                    {{ practice.title }}
+                </h4>
+                <span class="badge bg-primary">{{ practice.practice_type.title() }} Practice</span>
+            </div>
+            <div class="card-body">
+                <p class="lead">{{ practice.description }}</p>
+                
+                <form method="POST" action="{{ url_for('submit_practice') }}">
+                    <input type="hidden" name="practice_id" value="{{ practice.id }}">
+                    
+                    <div class="mb-3">
+                        <label for="submission" class="form-label">Your Response:</label>
+                        
+                        {% if practice.practice_type == 'listening' %}
+                            <div class="alert alert-info mb-3">
+                                <h6>👂 Listening Practice Instructions:</h6>
+                                <ul class="mb-0">
+                                    <li>Focus on key information, tone, and emotions</li>
+                                    <li>Listen for both explicit and implicit messages</li>
+                                    <li>Note speaker interactions and communication patterns</li>
+                                    <li>Provide a comprehensive analysis of what you heard</li>
+                                </ul>
+                            </div>
+                        {% elif practice.practice_type == 'observation' %}
+                            <div class="alert alert-warning mb-3">
+                                <h6>👁️ Observation Practice Instructions:</h6>
+                                <ul class="mb-0">
+                                    <li>Describe visual details thoroughly and systematically</li>
+                                    <li>Analyze facial expressions, body language, and interactions</li>
+                                    <li>Interpret the setting, mood, and atmosphere</li>
+                                    <li>Make inferences about relationships and motivations</li>
+                                </ul>
+                            </div>
+                        {% elif practice.practice_type == 'speaking' %}
+                            <div class="alert alert-success mb-3">
+                                <h6>🗣️ Speaking Practice Instructions:</h6>
+                                <ul class="mb-0">
+                                    <li>Write your complete speaking notes or transcript</li>
+                                    <li>Include emphasis points, pauses, and emotional cues</li>
+                                    <li>Focus on clear articulation and logical flow</li>
+                                    <li>Consider your audience and speaking purpose</li>
+                                </ul>
+                            </div>
+                        {% elif practice.practice_type == 'writing' %}
+                            <div class="alert alert-primary mb-3">
+                                <h6>✍️ Writing Practice Instructions:</h6>
+                                <ul class="mb-0">
+                                    <li>Use proper grammar, punctuation, and vocabulary</li>
+                                    <li>Organize ideas clearly with smooth transitions</li>
+                                    <li>Express thoughts concisely yet comprehensively</li>
+                                    <li>Maintain consistent tone and style throughout</li>
+                                </ul>
+                            </div>
+                        {% endif %}
+                        
+                        <textarea class="form-control" id="submission" name="submission" rows="10" 
+                                  placeholder="Enter your response here..." required></textarea>
+                    </div>
+                    
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{{ url_for('student_dashboard') }}" class="btn btn-secondary">Back to Dashboard</a>
+                        <button type="submit" class="btn btn-primary">Submit for AI Analysis</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row justify-content-center mt-3">
+    <div class="col-md-8">
+        <div class="alert alert-info">
+            <h6>📊 AI-Powered Analysis</h6>
+            <p class="mb-0">Your submission will be analyzed using advanced AI to provide feedback on communication effectiveness, clarity, and areas for improvement.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard - Shakespeare Club{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <h2>Admin Dashboard 👨‍💼</h2>
+        <hr>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-4">
+        <div class="card bg-primary text-white">
+            <div class="card-body">
+                <h5 class="card-title">Total Students</h5>
+                <h2>{{ stats.total_students }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card bg-success text-white">
+            <div class="card-body">
+                <h5 class="card-title">Total Practices</h5>
+                <h2>{{ stats.total_practices }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card bg-info text-white">
+            <div class="card-body">
+                <h5 class="card-title">Total Submissions</h5>
+                <h2>{{ stats.total_performances }}</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>Quick Actions</h5>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <a href="{{ url_for('add_practice') }}" class="btn btn-primary">➕ Add New Practice</a>
+                    <a href="{{ url_for('admin_practices') }}" class="btn btn-outline-primary">📚 Manage Practices</a>
+                    <a href="{{ url_for('admin_students') }}" class="btn btn-outline-success">👥 View Students</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>Recent Student Performances</h5>
+            </div>
+            <div class="card-body">
+                {% if recent_performances %}
+                    <div class="table-responsive">
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Student</th>
+                                    <th>Practice</th>
+                                    <th>Score</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for performance in recent_performances %}
+                                <tr>
+                                    <td>{{ performance.name }}</td>
+                                    <td>{{ performance.title }}</td>
+                                    <td>{{ "%.1f"|format(performance.score) }}%</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <p class="text-muted">No recent performances.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

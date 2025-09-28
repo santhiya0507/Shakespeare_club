@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block title %}Manage Practices - Shakespeare Club{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>Manage Practices 📚</h2>
+            <a href="{{ url_for('add_practice') }}" class="btn btn-primary">➕ Add New Practice</a>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        {% if practices %}
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                            <th>Created</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for practice in practices %}
+                        <tr>
+                            <td>
+                                {% if practice.practice_type == 'listening' %}👂
+                                {% elif practice.practice_type == 'observation' %}👁️
+                                {% elif practice.practice_type == 'speaking' %}🗣️
+                                {% elif practice.practice_type == 'writing' %}✍️
+                                {% endif %}
+                                {{ practice.title }}
+                            </td>
+                            <td><span class="badge bg-primary">{{ practice.practice_type.title() }}</span></td>
+                            <td>{{ practice.description[:100] }}{% if practice.description|length > 100 %}...{% endif %}</td>
+                            <td>{{ practice.created_at[:10] if practice.created_at else 'N/A' }}</td>
+                            <td>
+                                <a href="{{ url_for('take_practice', practice_id=practice.id) }}" class="btn btn-sm btn-outline-primary">View</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div class="alert alert-info">
+                <h5>No practices available</h5>
+                <p>Start by adding your first practice module.</p>
+                <a href="{{ url_for('add_practice') }}" class="btn btn-primary">Add Practice</a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

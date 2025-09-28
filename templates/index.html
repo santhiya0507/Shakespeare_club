@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12 text-center">
+        <h1 class="display-4 mb-4">🎭 Shakespeare Club Communication App</h1>
+        <h2 class="mb-4">SIR ISSAC NEWTON COLLEGE OF ENGINEERING AND TECHNOLOGY</h2>
+        <p class="lead mb-5">Enhance your communication skills through structured practice modules</p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6 mb-4">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                <h5 class="card-title">👨‍🎓 Student Portal</h5>
+                <p class="card-text">Access practice modules, track your progress, and view your communication skills ranking.</p>
+                <div class="d-grid gap-2">
+                    <a href="{{ url_for('student_login') }}" class="btn btn-primary">Student Login</a>
+                    <a href="{{ url_for('student_register') }}" class="btn btn-outline-primary">Student Registration</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6 mb-4">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                <h5 class="card-title">👨‍💼 Admin Portal</h5>
+                <p class="card-text">Manage students, upload practice materials, and analyze performance reports.</p>
+                <div class="d-grid gap-2">
+                    <a href="{{ url_for('admin_login') }}" class="btn btn-success">Admin Login</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-5">
+    <div class="col-md-12">
+        <h3 class="text-center mb-4">Communication Practice Modules</h3>
+        <div class="row">
+            <div class="col-md-3 mb-3">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h5 class="card-title">👂 Listening</h5>
+                        <p class="card-text">Improve listening comprehension skills</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h5 class="card-title">👁️ Observation</h5>
+                        <p class="card-text">Enhance observational and analytical abilities</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h5 class="card-title">🗣️ Speaking</h5>
+                        <p class="card-text">Develop verbal communication skills</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h5 class="card-title">✍️ Writing</h5>
+                        <p class="card-text">Strengthen written expression abilities</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
