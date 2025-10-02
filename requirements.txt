@@ -1,0 +1,12 @@
+# Core web framework
+Flask>=4
+
+# Audio processing and STT utilities
+pydub>=0.25,<1
+SpeechRecognition>=3.10,<4
+
+# Optional: Text-to-Speech for admin TTS tool
+gTTS>=2.5,<3
+
+# Optional: PDF generation for certificate download
+reportlab>=3.6,<4
